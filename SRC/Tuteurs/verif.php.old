@@ -1,0 +1,115 @@
+<?php
+    $id_v2=$_REQUEST['id_v2'];
+    $n_m=$_REQUEST['n_m'];
+    $mm=$_REQUEST['mm'];
+    $dep=$_REQUEST['dep'];
+	include('../../Layout/header.php');
+	include('CRUD.php');
+
+echo '  <div class="row content">
+	    <div class="col-sm-2 sidenav">';
+echo '</div>
+	    <div class="col-sm-8 text-left">';
+	echo '   <h2>Liste des pneus du véhicule '.$n_m.' '.$mm.'</h2>
+
+	<table class="table table-hover table-responsive">
+	<thead>';
+	echo'<tr>
+		<th class="droite" colspan="6"><a id="pave"><button class="badd"><span class="glyphicon glyphicon-plus"> <span class="glyphicon glyphicon-file">
+		</button></a></th>
+		</tr>';
+	echo '<tr>
+		<th>N°</th>
+		<th>N° Série</th>
+		<th>Marque</th>
+		<th>Type</th>
+		<th>Date</th>
+		<th>Action</th>
+		</tr>
+	</thead>
+	<tbody id="table_verif">
+';
+$detail=pg_query($conn,"select * from depenses where no_mlle='$n_m' ORDER BY date_d DESC");
+$k=1;
+
+while($p=pg_fetch_assoc($detail)){
+	 
+echo'    <tr>
+			<td>'.$k.'</td>
+			<td>'.$p['no_p'].'</td>
+			<td>'.$p['mark_p'].'</td>
+			<td>'.$p['type_p'].'</td>
+			<td>'.$p['date_d'].'</td>
+			<td><a id="pr" href="retire.php?dep='.$p['id_d'].'&n_m='.$p['no_mlle'].
+			'&nop='.$p['no_p'].
+			'&mp='.$p['mark_p'].
+			'&tp='.$p['type_p'].
+			'&mm='.$mm.'">
+			<button class="btn btn-danger"><span class="glyphicon glyphicon-trash"></button>
+			</td>
+		</tr>';
+		$k++;
+}
+
+echo'   </tbody>
+</table>
+</div>';
+echo '<div class="modal fade" id="pav_modal" role="dialog">
+    <div class="modal-dialog">';
+echo ' <div class="modal-content">
+        <div class="modal-header" style="padding:35px 50px;">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4>Ajout de Pneu au '.$mm.'('.$n_m.')</h4>
+        </div>
+        <div class="modal-body" style="padding:40px 50px;">
+          <form  role="form" method="post" action="verif.php">
+           <input type="hidden" name="ams" value="A">';
+           echo '<input type="hidden" name="n_m" value="'.$n_m.'">';
+		echo '<input type="hidden" name="mm" value="'.$mm.'">';
+		echo '<input type="hidden" name="dep" value="'.$dep.'">';
+		
+	     echo' <div class="form-group">
+		   <label class="control-label for="mat">Motif &nbsp;&nbsp;</label>
+		    
+		   <label><input type="text" class="form-control" id="mat" placeholder="Le motif du depense"
+		   name="description" ></label>
+		
+	    </div>';
+           
+echo'     <div class="form-group">
+		 <label class="control-label  for="mr">Date &nbsp;&nbsp;&nbsp;&nbsp;</label>
+		           
+		<label><input type="text" class="form-control" id="mr" value="'.date('y/m/d').'" name="date_d" readonly >
+		</label>
+		 </div>';
+    		 
+	echo'<div class="form-group">
+		 <label class="control-label  for="p">Pneu &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+		 
+		<label><select name="np">';
+			  			 while($v=pg_fetch_assoc($pneu)){
+					echo '<option value="'.$v['no_p'].'" selected>'.$v['no_p'].' '.$v['marque'].'</option>';
+							} 
+		echo '</select>
+			 </label>
+		 </div>';
+	echo '<button type="submit" class="btn btn-primary btn-block" name="valider" value="Ajouter">
+		<span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;Ajouter</button>
+		</form>
+		</div>
+		<div class="modal-footer">
+			<button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal">
+			<span class="glyphicon glyphicon-remove"></span> Annuler</button>';
+		echo'   </div>
+			 </div>
+			
+			 </div>
+			 </div> ';
+echo'<div class="col-sm-2 sidenav">';
+echo'<div class="well">
+			<input class="form-control" id="verif" type="text" placeholder="Search..">';
+echo'	 </div>';
+echo' </div>
+</div>';
+	include('../../Layout/footer.php');
+	?>

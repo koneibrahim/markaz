@@ -1,0 +1,112 @@
+<?php
+	include('../../Layout/header.php');
+	include('CRUD.php');
+echo '  <div class="row content">
+	    <div class="col-sm-2 sidenav">';
+echo '</div>
+	    <div class="col-sm-8 text-left">';
+	echo '   <h2>Gestion des Depenses</h2>
+  		<table  class="table table-hover table-responsive">';
+echo'	<thead>
+		 <tr>
+		   <th class="droite" colspan="8"><a id="daj" ><button class="badd"><span class="glyphicon glyphicon-plus"> <span class="glyphicon glyphicon-file"></button></a></th>
+		 </tr>
+		 <tr>
+		   <th>N°</th>
+		   <th>Motif</th>
+		   <th>Date depense</th>
+		   <th>Pneu</th>
+		   <th>type</th>
+		   <th>Véhicule</th>
+		   <th class="centre" colspan="2">Action</th>
+		 </tr>
+	    </thead>';
+echo'	<tbody id="table_verif">';
+		$i=1;
+		while($l=pg_fetch_assoc($liste)){
+echo'	
+		 <tr>
+		   <td>'.$i.'</td>
+		   <td>'.$l['description'].'</td>
+		   <td>'.$l['date_d'].'</td>
+		   <td>'.$l['no_p'].' '.$l['mark_p'].'</td>
+		   <td>'.$l['type_p'].'</td>
+		   <td>'.$l['ml'].' '.$l['marque'].'</td>
+		   <td><a href="modifier.php?id_d='.$l['id_d'].
+		   '&id_v='.$l['id_v'].
+		   '&description='.$l['description'].
+		   '&date_d='.$l['date_d'].
+		   '&no_mlle='.$l['no_mlle'].
+		   '&no_p='.$l['no_p'].
+		   '&mark_p='.$l['mark_p'].
+		   '&type_p='.$l['type_p'].'">
+		   <button class="btn btn-success"><span class="glyphicon glyphicon-pencil"><span class="glyphicon glyphicon-file"></button></a></td>
+			 <td><a href="supprimer.php?id_d='.$l['id_d'].
+			 '&no_p='.$l['no_p'].
+		   '&mark_p='.$l['mark_p'].
+		   '&type_p='.$l['type_p'].
+			 '&date_d='.$l['date_d'].'">
+		   <button class="btn btn-danger"><span class="glyphicon glyphicon-trash"></button></a></td>
+		 </tr>';
+		 $i++;
+	    }
+echo ' </tbody>';
+echo'  </table>
+	</div>';
+echo '<div class="modal fade" id="da_Modal" role="dialog">
+    <div class="modal-dialog">';
+echo ' <div class="modal-content">
+        <div class="modal-header" style="padding:35px 50px;">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4>Nouveau Pneu</h4>
+        </div>
+        <div class="modal-body" style="padding:40px 50px;">
+          <form  role="form" method="post" action="index.php">
+           <input type="hidden" name="ams" value="A">
+	       <div class="form-group">
+		   <label class="control-label for="mat">Motif &nbsp;&nbsp;</label>
+		   <label><input type="text" class="form-control" id="mat" placeholder="Le motif du depense"
+		   name="description" ></label>
+	    </div>';
+echo'     <div class="form-group">
+		 <label class="control-label  for="mr">Date &nbsp;&nbsp;&nbsp;&nbsp;</label>
+		<label><input type="text" class="form-control" id="mr" value="'.date('y/m/d').'" name="date_d" readonly >
+		</label>
+		 </div>';
+	echo'<div class="form-group">
+		 <label class="control-label  for="p">Pneu &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+		<label><select name="np">';
+			  			 while($v=pg_fetch_assoc($pneu)){
+					echo '<option value="'.$v['no_p'].'" selected>'.$v['no_p'].' '.$v['marque'].'</option>';
+							} 
+		echo '</select>
+			 </label>
+		 </div>';
+	    echo'<div class="form-group">
+		 <label class="control-label  for="date">Vehicule &nbsp;</label>
+		<label><select name="no_mlle">';
+			while($v=pg_fetch_assoc($voiture)){
+				   echo '<option value="'.$v['no_mlle'].'" selected>'.$v['no_mlle'].' '.$v['marque'].'</option>';
+				}
+		echo '</select>
+			 </label>
+	    </div>';
+	echo '<button type="submit" class="btn btn-primary btn-block" name="valider" value="Ajouter">
+		<span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;Ajouter</button>
+		</form>
+		</div>
+		<div class="modal-footer">
+			<button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal">
+			<span class="glyphicon glyphicon-remove"></span> Annuler</button>';
+		echo'   </div>
+			 </div>
+			 </div>
+			 </div> ';
+echo'<div class="col-sm-2 sidenav">';
+echo'<div class="well">
+			<input class="form-control" id="verif" type="text" placeholder="Search..">';
+echo'	 </div>';
+echo' </div>
+</div>';
+	include('../../Layout/footer.php');
+?>

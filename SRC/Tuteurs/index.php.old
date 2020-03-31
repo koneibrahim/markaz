@@ -1,0 +1,125 @@
+<?php
+	include('../../Layout/header.php');
+	include('CRUD.php');
+
+echo '  <div class="row content">
+	    <div class="col-sm-2 sidenav">';
+echo '</div>
+	    <div class="col-sm-8 text-left">';
+	echo '   <h2>Gestion des  Vehicules</h2>
+
+  		<table  class="table table-hover table-responsive">';
+echo'	<thead>
+
+		 <tr>
+		   <th class="droite" colspan="7"><a id="vaj"><button class="badd"><span class="glyphicon glyphicon-plus"> <span class="glyphicon glyphicon-file"></button></a></th>
+		 </tr>
+		 <tr>
+		   <th>N°</th>
+		   <th>N°Matricule</th>
+		   <th>Marque</th>
+		   <th>Type</th>
+		   <th>Etat</th>
+		   <th colspan="2">Action</th>
+		 </tr>
+	    </thead>';
+echo'	<tbody id="table_verif">';
+		$i=1;
+		while($l=pg_fetch_assoc($liste)){
+echo'
+		 <tr>
+		   <td>'.$i.'</td>
+			 <td><b><a class="a1" href="verif.php?id_v2='.$l['id_v'].'&n_m='.$l['no_mlle'].
+			 '&mm='.$l['marque'].'"></b>'.$l['no_mlle'].'<a/></td>
+		   <td>'.$l['marque'].'</td>
+			 <td>'.$l['type'].'</td>';
+			 			if($l['etat']=="A")
+	echo'  <td>Actif</td>';
+						else
+	echo'  <td>En panne</td>';					
+	echo'  <td><a href="modifier.php?id_v='.$l['id_v'].
+		   '&no_mlle='.$l['no_mlle'].
+		   '&marque='.$l['marque'].
+		   '&type='.$l['type'].
+		   '&etat='.$l['etat'].'">
+		   <button class="btn btn-success"><span class="glyphicon glyphicon-pencil"><span class="glyphicon glyphicon-file"></button></a></td>
+		   <td ><a href="supprimer.php?id_v='.$l['id_v'].
+		   '&no_mlle='.$l['no_mlle'].
+		   '&marque='.$l['marque'].'">
+		   <button class="btn btn-danger"><span class="glyphicon glyphicon-trash"></button></td>
+		 </tr>';
+		 $i++;
+	    }
+echo ' </tbody>';
+echo'  </table>
+	</div>';
+echo '<div class="modal fade" id="ve_Modal" role="dialog">
+    <div class="modal-dialog">';
+echo ' <div class="modal-content">
+        <div class="modal-header" style="padding:35px 50px;">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4>Nouveau Véhicule</h4>
+        </div>
+        <div class="modal-body" style="padding:40px 50px;">
+          <form  role="form" method="post" action="index.php">
+           <input type="hidden" name="ams" value="AA">
+		
+	       <div class="form-group">
+		   <label class="control-label for="mat">N° Matricule &nbsp;</label>
+		    
+		   <label><input type="text" class="form-control" id="mat" placeholder="N°  du plaque"
+		   name="no_mlle" ></label>
+		
+	    </div>';
+           
+echo'     <div class="form-group">
+		 <label class="control-label  for="mr">Marque &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+		           
+		<label><input type="text" class="form-control" id="mr" value="" name="marque" placeholder="Ex. Mercedes Reanault" ></label>
+		 </div>
+    		 
+		<div class="form-group">
+		 <label class="control-label  for="date">Type &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+		 
+		<label><select name="type">';
+			  			 echo '<option value="Camion" selected>Camion</option>';
+			  			 echo '<option value="Citerne" >Citerne</option>';
+			  			 echo '<option value="Carasoire" >Carasoire</option>';
+		echo '</select>
+			 </label>
+		 
+	    </div>
+	    
+	    <div class="form-group">
+		 <label class="control-label  for="date">Etat &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+		 
+		<label><select name="etat">';
+			 echo '<option value="A" selected>Actif</option>';
+			 echo '<option value="P">En Panne</option>';
+	echo '</select>
+	</label>
+		 
+	    </div>
+
+		<button type="submit" class="btn btn-primary btn-block" name="valider" value="Ajouter">
+		<span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;Ajouter</button>
+		</form>
+		</div>
+		<div class="modal-footer">
+			<button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal">
+			<span class="glyphicon glyphicon-remove"></span> Annuler</button>';
+			
+		echo'   </div>
+			 </div>
+			
+			 </div>
+			 </div> ';
+echo'<div class="col-sm-2 sidenav">';
+echo'<div class="well">
+			<input class="form-control" id="verif" type="text" placeholder="Search..">';
+echo'	 </div>';
+echo' </div>
+</div>
+</div>';
+		include('../../Layout/footer.php');
+	?>
